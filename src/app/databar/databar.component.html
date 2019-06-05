@@ -1,0 +1,23 @@
+<div class='sub-card'>
+  <svg width="100%" class="databar" (click)="clicked($event)">
+      <g class="transform">
+          <defs>
+              <clipPath id="clip">
+                  <rect class='clip-rect'></rect>
+              </clipPath>
+              <filter id="shadow">
+                  <feDropShadow dx="0" dy="0" flood-color="rgba(0,123,255,.25)" stdDeviation="3"/>
+              </filter>
+          </defs>
+          <rect class="zoom"></rect>
+          <g class="energy"></g>
+          <g class="signals"></g>
+          <g class="labels"></g>
+          <g class="handles"></g>
+          <g class="ghost"></g>
+          <g class="timebar"></g>
+          <g class="axes"></g>
+          <g class="cursor"></g>
+      </g>
+  </svg>
+</div>
