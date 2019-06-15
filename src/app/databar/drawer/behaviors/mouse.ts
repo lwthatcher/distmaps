@@ -1,5 +1,6 @@
 import { Drawer } from "../drawer";
 import * as d3 from "d3";
+import { analyzeAndValidateNgModules } from '@angular/compiler';
 
 export class MouseBehavior {
     // #region [Constants]
@@ -58,7 +59,7 @@ export class MouseBehavior {
     private mouse_leave() {
         this.drawer.layers.svg.classed('custom-cursor', false);
         this.drawer.clear('cursor', 'ghost');
-        this.drawer.behaviors.pour.end();
+        // this.drawer.behaviors.pour.end();
     }
     
     private mouse_down() {
@@ -83,7 +84,7 @@ export class MouseBehavior {
         }
         // for pour behaviour
         if (this.mouse_event.button === 0) {
-            this.drawer.behaviors.pour.end();
+            // this.drawer.behaviors.pour.end();
         }
     }
     // #endregion
@@ -108,10 +109,11 @@ export class MouseBehavior {
     }
 
     double_click() {
-        let event = d3.event;
-        let [x,y] = this.drawer.xy();
-        this.drawer.video.jumpTo(this.drawer.x.invert(x));
-        console.log('double click!', this.drawer.x.invert(x));
+        console.info('--double click--', d3.event)
+        // let event = d3.event;
+        // let [x,y] = this.drawer.xy();
+        // this.drawer.video.jumpTo(this.drawer.x.invert(x));
+        // console.log('double click!', this.drawer.x.invert(x));
     }
 
     /** call-back for pressing the middle scroll-wheel button */
@@ -131,7 +133,8 @@ export class MouseBehavior {
 
     /** call-back for performing a left-click on the mouse */
     left_click() {
-        if (this.mode.pour) {this.drawer.behaviors.pour.start()}
+        console.info('--left click [no-op]--', d3.event);
+        // if (this.mode.pour) {this.drawer.behaviors.pour.start()}
     }
     // #endregion
 
@@ -145,7 +148,8 @@ export class MouseBehavior {
     
     private overlaps(event?: MouseEvent): boolean {
         event = event || this.mouse_event;
-        return d3.select(event.target).classed('label');
+
+        return d3.select(event.target as any).classed('label');
     }
     // #endregion
 }

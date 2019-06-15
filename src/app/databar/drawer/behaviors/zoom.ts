@@ -49,7 +49,7 @@ export class ZoomBehavior {
     private zoom_start() { this.z_start = Date.now() }
     
     private zoom_end() {
-        if (this.drawer.mode.pour) { this.drawer.behaviors.pour.end() }
+        // if (this.drawer.mode.pour) { this.drawer.behaviors.pour.end() }
         let Δt = Date.now() - this.z_start;
         this.z_start = undefined;
     }

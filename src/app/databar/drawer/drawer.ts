@@ -7,7 +7,7 @@ import { LayerMap } from './layers';
 // import { DisplayMode } from '../../energy/energy-wells';
 import { HighlightBehavior } from './behaviors/highlight';
 import { DragBehavior } from './behaviors/drag';
-import { PourBehavior } from './behaviors/pour'
+// import { PourBehavior } from './behaviors/pour';
 import { MouseBehavior } from './behaviors/mouse';
 import { ZoomBehavior } from './behaviors/zoom';
 import * as d3 from "d3";
@@ -44,7 +44,7 @@ export class Drawer {
     this.behaviors = {};
     this.behaviors.highlight = new HighlightBehavior(this);
     this.behaviors.drag = new DragBehavior(this);
-    this.behaviors.pour = new PourBehavior(this);
+    // this.behaviors.pour = new PourBehavior(this);
     this.behaviors.mouse = new MouseBehavior(this);
     this.behaviors.zoom = new ZoomBehavior(this);
     // register non-local behaviors
