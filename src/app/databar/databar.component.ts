@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ElementRef, Output, EventEmitter, Input } from '@angular/core';
 import { datum } from './interfaces/data.interface';
 import { LabelStream } from './labeller/labelstream';
 import { Labeller } from './labeller/labeller';
@@ -11,6 +11,10 @@ import { Drawer } from './drawer/drawer';
   styleUrls: ['./databar.component.css']
 })
 export class DatabarComponent implements OnInit {
+
+  //# region [Inputs]
+  @Input() data;
+  // #endregion
 
   // #region [Outputs]
   @Output() zoom = new EventEmitter<any>();
