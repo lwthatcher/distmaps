@@ -20,14 +20,6 @@ export class DatabarComponent implements OnInit {
   @Output() zoom = new EventEmitter<any>();
   // #endregion
 
-  // #region [Constructors]
-  constructor(private el: ElementRef) { }
-
-  ngOnInit() {
-    console.info('databar init', this);
-  }
-  // #endregion
-
   // #region [Properties]
   //data
   _data: Promise<datum[][]>;
@@ -42,17 +34,35 @@ export class DatabarComponent implements OnInit {
   get width() { return this.WIDTH - this.margin.left - this.margin.right; }
   get height() { return this.HEIGHT - this.margin.top - this.margin.bottom; }
   // labels
-  labeller: Labeller;
   labelstream: LabelStream;
   get labels() { return this.labelstream && this.labelstream.labels || [] }
   get selected_label() { return this.labels && this.labels.find((lbl) => lbl.selected) || false }
-  // modes
+  // Trackers
   mode: ModeTracker;
+  // Helpers
+  labeller: Labeller;
+  drawer: Drawer;
   // stubs
   get has_energy() { return false }
-  drawer: Drawer;
   get x() { return this.drawer.x }
   get x0() { return this.drawer.x0 }
+  // #endregion
+
+  // #region [Constructors]
+  constructor(private el: ElementRef) { }
+
+  ngOnInit() {
+    // selectors
+    this.container = this.el.nativeElement.parentElement;
+    console.log('containers', this.el.nativeElement, this.container);
+    // setup trackers
+    this.mode = new ModeTracker();
+    // setup helpers
+    this.drawer = new Drawer(this);
+    this.labeller = new Labeller(this);
+    // log
+    console.info('databar init', this);
+  }
   // #endregion
 
   // #region [Callbacks]
