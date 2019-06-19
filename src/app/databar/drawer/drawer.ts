@@ -1,13 +1,10 @@
 import { DatabarComponent } from '../databar.component';
 import { Label } from '../interfaces/label.interface';
 import { arraysEqual } from '../util/util';
-// import { Selection } from '../interfaces/selection.interface';
 import { time_format } from './time-format';
 import { LayerMap } from './layers';
-// import { DisplayMode } from '../../energy/energy-wells';
 import { HighlightBehavior } from './behaviors/highlight';
 import { DragBehavior } from './behaviors/drag';
-// import { PourBehavior } from './behaviors/pour';
 import { MouseBehavior } from './behaviors/mouse';
 import { ZoomBehavior } from './behaviors/zoom';
 import * as d3 from "d3";
@@ -80,10 +77,6 @@ export class Drawer {
   get ls() { return this.databar.labelstream }
 
   get isDomainSet() { return this.x && !arraysEqual(this.x.domain(), [0, 1]) }
-
-  // get energy() { return this.databar.energy || undefined }
-
-  // get video() { return this.databar.video }
   // #endregion
 
   // #region [Callbacks]
@@ -97,30 +90,16 @@ export class Drawer {
   get fill() { return 'blue' }
   // #endregion
 
-  // #region [Data Loading]
-  // async stackedSeries() {
-  //   let formatted = await this.energy.formatted;
-  //   let stack = d3.stack()
-  //                 .keys(this.energy.short_dims)
-  //                 .order(d3.stackOrderAscending);
-  //   return stack(formatted);
-  // }
-  // #endregion
-
   // #region [Public Plotting Methods]
   async draw() {
     this.set_ranges();
     let data = await this.databar.data.then((d: number[][]) => d3.transpose(d))
     this.set_domains(data);
-    // this.energy_domains();
-    // this.databar.stop_spinner();
     this.draw_xAxis();
     this.draw_yAxis();
-    // this.draw_energy();
     this.plot_signals(data);
     this.draw_labels();
     this.draw_handles();
-    // this.draw_ctb();
   }
   
   draw_labels() {
@@ -182,13 +161,6 @@ export class Drawer {
         .attr("transform", "translate( " + W + ", 0 )")
         .call(d3.axisLeft(this.Y[1]));
     }
-    // if (this.energy.has_energy) {
-    //   let y = this.eyAxis();
-    //   this.layers.axes.append('g')
-    //       .attr('class', 'y-axis')
-    //       .attr("transform", "translate( " + W + ", 0 )")
-    //       .call(d3.axisRight(y));
-    // }
   }
 
   draw_cursor(cursor) {
@@ -223,34 +195,6 @@ export class Drawer {
         .attr('width', this.width)
         .attr('fill', this.fill);
   }
-
-  // draw_ctb() {
-  //   this.clear('timebar');
-  //   if (!this.video.canPlay || !this.video.sync.canSync) { return; }
-  //   let t = this.x(this.video.dt)
-  //   this.layers.timebar.append('line')
-  //       .attr('x1', t)
-  //       .attr('x2', t)
-  //       .attr('y1', 0)
-  //       .attr('y2', this.h)
-  //       .attr("clip-path", "url(#clip)")
-  //       .attr('class', 'current-time-bar')
-  //       .append('svg:title')
-  //       .text('Current Time: ' + this.video.vt.toString())
-  // }
-
-  // async draw_energy() {
-  //   if (!this.energy.has_energy) { return }
-  //   if (!this.energy.visible) { this.clear('energy'); return; }
-  //   if (this.energy.displayMode === DisplayMode.Stacked) {
-  //     let series = await this.stackedSeries();
-  //     this.plotStacked(series);
-  //   }
-  //   else if (this.energy.displayMode === DisplayMode.Overlayed) {
-  //     let data = await this.energy.data;
-  //     this.plotOverlayed(data);
-  //   }
-  // }
   // #endregion
 
   // #region [Update Methods]
@@ -263,13 +207,6 @@ export class Drawer {
       dim_sigs.attr("d", this.lines[j]);
     }
   }
-
-  // updateEnergy() {
-  //   if (this.energy.displayMode === DisplayMode.Overlayed)
-  //     this.energyWells.attr('d', this.area);
-  //   else if (this.energy.displayMode === DisplayMode.Stacked)
-  //     this.energyWells.attr('d', this.stacked_area);
-  // }
 
   updateLabels() {
     let width = (d) => { return this.x(d.end) - this.x(d.start) }
@@ -301,14 +238,6 @@ export class Drawer {
     }
   }
 
-  // private plot_signals_array(data: number[][]) {
-  //   data = d3.transpose(data);
-  //   console.log('transposed data', data);
-  //   this.layers.signals.selectAll('path')
-  //       .data(data)
-        
-  // }
-  
   private plot_signal(signal, j) {
     this.layers.signals.append("path")
         .datum(signal)
@@ -392,36 +321,6 @@ export class Drawer {
   }
   // #endregion
 
-  // #region [Energy Wells Plotting Helpers]
-  private plotStacked(series) {
-    // update selection
-    let wells: d3.Selection<any,unknown,any,any> = this.layers.energy.selectAll('path').data(series)
-    // exit selection
-    wells.exit()
-         .remove()
-    // entering selection
-    wells = wells.enter().append('path')
-          .merge(wells)
-          .attr('class', 'energy')
-          .attr("clip-path", "url(#clip)")
-          // .attr('fill', (d,i) => this.databar.colorer.wells.get(i))
-          .attr('d', this.stacked_area)
-          .append('svg:title').text((d: any,i) => {return d.key})
-  }
-
-  private plotOverlayed(data) {
-    console.debug('plotting overlayed', data);
-    for (let j = 0; j < data.length; j++) {
-      this.layers.energy.append('path')
-                        .datum(data[j])
-                        .attr('class', 'energy')
-                        // .attr('fill', this.databar.colorer.wells.get(j+1))
-                        .attr("clip-path", "url(#clip)")
-                        .attr('d', this.area);
-    }
-  }
-  // #endregion
-
   // #region [Domains and Ranges]
   set_ranges() {
     // set x-ranges
@@ -431,30 +330,17 @@ export class Drawer {
     for (let j of this.yDims()) {
       this.Y[j] = d3.scaleLinear().rangeRound([this.h, 0]);
     }
-    // this.ye = d3.scaleLog()
-    //             .clamp(true)
-    //             .rangeRound([0, this.h]);
-    // this.ys = d3.scaleLog()
-    //             .clamp(true)
-    //             .rangeRound([0, this.h]);
     // setup line-drawing method(s)
     for (let j of this.yDims()) {
       this.lines[j] = d3.line().x((d,i) => this.x(i))
                                .y((d) => this.Y[j](d))
     }
-    // setup area-drawing method
-    // this.area = d3.area()
-    //       .x((d: any) => this.xe(d.i))
-    //       .y1((d: any) => this.ye(d.d+1));
-    // this.stacked_area = d3.area()
-    //       .x((d: any) => this.xe(d.data.i))
-    //       .y0((d) => this.ys(d[0]+1))
-    //       .y1((d) => this.ys(d[1]+1));
   }
 
   set_domains(axes) {
     // setup x-domains
-    // let max = axes[0][axes[0].length-1].i;
+    // TODO: extract data accessor approaches
+      // let max = axes[0][axes[0].length-1].i;
     let max = axes[0].length;
     this.x.domain([0, max]);
     this.x0.domain(this.x.domain());
@@ -469,22 +355,6 @@ export class Drawer {
                         d3.max(axes[j], (d: any) => d)])
     }
   }
-
-  // async energy_domains() {
-  //   if (!this.energy.has_energy) { return }
-  //   // await data
-  //   let axes = await this.energy.data;
-  //   let series = await this.stackedSeries();
-  //   // helper methods
-  //   let imax = axes[0][axes[0].length-1].i;
-  //   let seriesMax = (layer) => { return d3.max(layer, (d) => d[1]+1) };
-  //   // set domains
-  //   this.xe.domain([0, imax]);
-  //   this.ye.domain([1, d3.max(axes, (ax) => d3.max(ax, (d) => d.d+1))]);
-  //   this.ys.domain([1, d3.max(series, seriesMax)])
-
-  //   this.area.y0(this.ye(0));
-  // }
 
   private yDims() {
     // if (this.sensor.channel === 'B') return [0, 1];
