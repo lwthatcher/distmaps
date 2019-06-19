@@ -17,7 +17,7 @@ export class Drawer {
   databar: DatabarComponent;
   layers: LayerMap;
   x; x0;
-  xe; ye; ys;
+  y;
   area; stacked_area;
   Y = [];
   lines = [];
@@ -110,7 +110,7 @@ export class Drawer {
   // #region [Public Plotting Methods]
   async draw() {
     this.set_ranges();
-    let data = await this.databar._data;
+    let data = await this.databar.data.then((d: number[][]) => d3.transpose(d))
     this.set_domains(data);
     // this.energy_domains();
     // this.databar.stop_spinner();
@@ -294,10 +294,20 @@ export class Drawer {
     _data = await Promise.resolve(_data);
     let data = this.databar.downsample(_data);
     // draw each signal
+    console.info('signals', data.length);
     for (let j = 0; j < data.length; j++) {
+      console.debug('plotting', j, data[j]);
       this.plot_signal(data[j], j);
     }
   }
+
+  // private plot_signals_array(data: number[][]) {
+  //   data = d3.transpose(data);
+  //   console.log('transposed data', data);
+  //   this.layers.signals.selectAll('path')
+  //       .data(data)
+        
+  // }
   
   private plot_signal(signal, j) {
     this.layers.signals.append("path")
@@ -305,9 +315,9 @@ export class Drawer {
         .attr("fill", "none")
         .attr("clip-path", "url(#clip)")
         .attr("class", "line line-" + j.toString())
-        // .attr("stroke", this.databar.colorer.lines.get(j+1))
+        .attr("stroke", "blue")
         .attr("idx", j)
-        .attr("d", this.getLine(j))
+        .attr("d", this.lines[0])
         .on("mouseover", () => this.behaviors.highlight.mouseover(j))
         .on("mouseout", () => this.behaviors.highlight.mouseout())
   }
@@ -417,46 +427,46 @@ export class Drawer {
     // set x-ranges
     this.x = d3.scaleLinear().rangeRound([0, this.w]);
     this.x0 = d3.scaleLinear().rangeRound([0, this.w]);
-    this.xe = d3.scaleLinear().rangeRound([0, this.w]);
     // set y-ranges
     for (let j of this.yDims()) {
       this.Y[j] = d3.scaleLinear().rangeRound([this.h, 0]);
     }
-    this.ye = d3.scaleLog()
-                .clamp(true)
-                .rangeRound([0, this.h]);
-    this.ys = d3.scaleLog()
-                .clamp(true)
-                .rangeRound([0, this.h]);
+    // this.ye = d3.scaleLog()
+    //             .clamp(true)
+    //             .rangeRound([0, this.h]);
+    // this.ys = d3.scaleLog()
+    //             .clamp(true)
+    //             .rangeRound([0, this.h]);
     // setup line-drawing method(s)
     for (let j of this.yDims()) {
-      this.lines[j] = d3.line().x((d: any) => this.x(d.i))
-                               .y((d: any) => this.Y[j](d.d))
+      this.lines[j] = d3.line().x((d,i) => this.x(i))
+                               .y((d) => this.Y[j](d))
     }
     // setup area-drawing method
-    this.area = d3.area()
-          .x((d: any) => this.xe(d.i))
-          .y1((d: any) => this.ye(d.d+1));
-    this.stacked_area = d3.area()
-          .x((d: any) => this.xe(d.data.i))
-          .y0((d) => this.ys(d[0]+1))
-          .y1((d) => this.ys(d[1]+1));
+    // this.area = d3.area()
+    //       .x((d: any) => this.xe(d.i))
+    //       .y1((d: any) => this.ye(d.d+1));
+    // this.stacked_area = d3.area()
+    //       .x((d: any) => this.xe(d.data.i))
+    //       .y0((d) => this.ys(d[0]+1))
+    //       .y1((d) => this.ys(d[1]+1));
   }
 
   set_domains(axes) {
     // setup x-domains
-    let max = axes[0][axes[0].length-1].i;
+    // let max = axes[0][axes[0].length-1].i;
+    let max = axes[0].length;
     this.x.domain([0, max]);
     this.x0.domain(this.x.domain());
     // combined y-domains (default)
     if (this.yDims().length === 1) {
-      this.Y[0].domain([d3.min(axes, (ax: any) => d3.min(ax, (d: any) => d.d)), 
-                        d3.max(axes, (ax: any) => d3.max(ax, (d: any) => d.d))]);
+      this.Y[0].domain([d3.min(axes, (ax: any) => d3.min(ax, (d: any) => d)), 
+                        d3.max(axes, (ax: any) => d3.max(ax, (d: any) => d))]);
     }
     // individual y-domains
     else for (let j of this.yDims()) {
-      this.Y[j].domain([d3.min(axes[j], (d: any) => d.d), 
-                        d3.max(axes[j], (d: any) => d.d)])
+      this.Y[j].domain([d3.min(axes[j], (d: any) => d), 
+                        d3.max(axes[j], (d: any) => d)])
     }
   }
 
@@ -486,12 +496,6 @@ export class Drawer {
     // if (this.sensor.channel !== 'B') return this.lines[0];
     // else return this.lines[j];
     return this.lines[j];
-  }
-
-  private eyAxis() {
-    // if (this.energy.displayMode === DisplayMode.Overlayed) return this.ye;
-    // else return this.ys;
-    return this.ys;
   }
   // #endregion
 

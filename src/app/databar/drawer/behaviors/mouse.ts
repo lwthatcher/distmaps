@@ -94,7 +94,7 @@ export class MouseBehavior {
     /** general click call-back bound to the SVG */
     clicked(event: MouseEvent) {
         if (this.overlaps(event)) { return }    // ignore clicks on labels
-        this.drawer.labeller.deselect();               // deselect any selected labels
+        // this.drawer.labeller.deselect();               // deselect any selected labels
         // if label-creation mode, add an event
         if (this.mode.click) {
             let [x,y] = this.drawer.xy(event);

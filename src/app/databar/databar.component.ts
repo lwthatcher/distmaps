@@ -60,14 +60,10 @@ export class DatabarComponent implements OnInit {
     // setup helpers
     this.drawer = new Drawer(this);
     this.labeller = new Labeller(this);
+    // draw
+    this.drawer.draw();
     // log
     console.info('databar init', this);
-  }
-  // #endregion
-
-  // #region [Callbacks]
-  clicked(e) {
-    console.log('you clicked me!', e);
   }
   // #endregion
 
