@@ -47,9 +47,9 @@ export class HighlightBehavior {
                 .style("opacity", 1);
 
         // #TODO: sensor -> tooltip display text
-        // this.div.html(this.drawer.sensor.name + ' - ' + this.drawer.sensor.dims[j])
-        //         .style("left", (d3.event.pageX - 55) + "px")
-        //         .style("top", (d3.event.pageY - 40) + "px");
+        this.div.html(j)
+                .style("left", (d3.event.pageX - 55) + "px")
+                .style("top", (d3.event.pageY - 40) + "px");
     }
     // #endregion
 }

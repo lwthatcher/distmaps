@@ -60,9 +60,9 @@ export class DatabarComponent implements OnInit {
     // setup trackers
     this.mode = new ModeTracker();
     // setup helpers
+    this.colorer = new Colorer(this);
     this.drawer = new Drawer(this);
     this.labeller = new Labeller(this);
-    this.colorer = new Colorer(this);
     // draw
     this.drawer.draw();
     // log

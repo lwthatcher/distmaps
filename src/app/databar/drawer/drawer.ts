@@ -72,6 +72,8 @@ export class Drawer {
 
   get labeller() { return this.databar.labeller }
 
+  get colorer() { return this.databar.colorer }
+
   get label_type() { return this.ls.eventType }
 
   get ls() { return this.databar.labelstream }
@@ -243,7 +245,7 @@ export class Drawer {
         .attr("fill", "none")
         .attr("clip-path", "url(#clip)")
         .attr("class", "line line-" + j.toString())
-        .attr("stroke", "blue")
+        .attr("stroke", () => { return this.colorer.lineColor(j);} )
         .attr("idx", j)
         .attr("d", this.lines[0])
         .on("mouseover", () => this.behaviors.highlight.mouseover(j))

@@ -17,7 +17,7 @@ export class Colorer {
     // #endregion
 
     // #region [Public Methods]
-    lineColor(i): string {
+    public lineColor(i): string {
         return this._lines[i];
     }
     // #endregion
