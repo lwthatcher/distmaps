@@ -4,6 +4,7 @@ import { LabelStream } from './labeller/labelstream';
 import { Labeller } from './labeller/labeller';
 import { ModeTracker } from './modes/tool-mode';
 import { Drawer } from './drawer/drawer';
+import { Colorer } from './colorer/colorer';
 
 @Component({
   selector: 'dmap-databar',
@@ -42,6 +43,7 @@ export class DatabarComponent implements OnInit {
   // Helpers
   labeller: Labeller;
   drawer: Drawer;
+  colorer: Colorer;
   // stubs
   get has_energy() { return false }
   get x() { return this.drawer.x }
@@ -60,6 +62,7 @@ export class DatabarComponent implements OnInit {
     // setup helpers
     this.drawer = new Drawer(this);
     this.labeller = new Labeller(this);
+    this.colorer = new Colorer(this);
     // draw
     this.drawer.draw();
     // log

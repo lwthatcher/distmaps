@@ -14,6 +14,7 @@ export class ZoomBehavior {
     constructor(drawer: Drawer) {
         this.drawer = drawer;
         this.zoom = this.setup_zoom();
+        console.debug('init zoom behavior', this);
     }
     // #endregion
 

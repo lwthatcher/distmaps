@@ -233,7 +233,6 @@ export class Drawer {
     // draw each signal
     console.info('signals', data.length);
     for (let j = 0; j < data.length; j++) {
-      console.debug('plotting', j, data[j]);
       this.plot_signal(data[j], j);
     }
   }
