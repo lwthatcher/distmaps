@@ -233,7 +233,6 @@ export class Drawer {
     _data = await Promise.resolve(_data);
     let data = this.databar.downsample(_data);
     // draw each signal
-    console.info('signals', data.length);
     for (let j = 0; j < data.length; j++) {
       this.plot_signal(data[j], j);
     }

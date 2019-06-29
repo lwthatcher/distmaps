@@ -45,7 +45,9 @@ export class ZoomBehavior {
         else { console.warn('unexpected zoom-event type:', type, 'region:', region, 'mode:', mode.current) }
     }
     
-    private emit_zoom() { this.drawer.databar.zoom.emit(d3.event) }
+    private emit_zoom() {
+        this.drawer.databar.updateZoom(d3.event.transform);
+    }
     
     private zoom_start() { this.z_start = Date.now() }
     

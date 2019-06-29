@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, ElementRef, Output, EventEmitter, Input, HostListener } from '@angular/core';
 import { datum } from './interfaces/data.interface';
 import { LabelStream } from './labeller/labelstream';
 import { Labeller } from './labeller/labeller';
@@ -44,10 +44,11 @@ export class DatabarComponent implements OnInit {
   labeller: Labeller;
   drawer: Drawer;
   colorer: Colorer;
-  // stubs
-  get has_energy() { return false }
+  // accessors
   get x() { return this.drawer.x }
   get x0() { return this.drawer.x0 }
+  // stubs
+  get has_energy() { return false }
   // #endregion
 
   // #region [Constructors]
@@ -70,9 +71,35 @@ export class DatabarComponent implements OnInit {
   }
   // #endregion
 
+  // #region [Lifecycle Hooks]
+
+  // #endregion
+
+  // #region [Event Handlers]
+  @HostListener('window:resize', ['$event'])
+  window_resize(event: any) {
+    console.debug('window resize', this.width, this.height);
+    this.drawer.clear();
+    this.drawer.draw();
+    this.drawer.layers['clip'].attr('width', this.width);
+  }
+  // #endregion
+
+  // #region [Update Methods]
+  updateZoom(t) {
+    // rescale x-domain to zoom level
+    this.drawer.x.domain(t.rescaleX(this.x0).domain());
+    // redraw signals
+    this.drawer.updateSignals();
+    // redraw x-axis
+    this.drawer.clear('x-axis');
+    this.drawer.draw_xAxis();
+  }
+  // #endregion
+
   // #region [Public Methods]
+  // TODO: implement downsample
   downsample(data) {
-    // #TODO: downsample
     return data;
   }
   // #endregion
