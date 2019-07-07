@@ -1,1 +1,41 @@
 /* You can add global styles to this file, and also import other style files */
+.line {
+    stroke-width: 1.8px;
+    stroke-opacity: 0.8;
+}
+
+.line--fade {
+    stroke-width: 1.5px;
+    stroke-opacity: 0.5;
+    stroke-dasharray: 1,3;
+}
+
+.line--hover {
+    stroke-width: 2px;
+    stroke-opacity: 1.0;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    pointer-events: none;
+    line-height: 1;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    border-radius: 4px;
+  }
+    
+/* Creates a small triangle extender for the tooltip */
+div.tooltip:after {
+    box-sizing: border-box;
+    font-size: 11px;
+    top: 98%;
+    left: 50%;
+    line-height: 1;
+    margin-top: -3%;
+    color: rgba(0, 0, 0, 0.6);
+    content: "\25BC";
+    position: absolute;
+    text-align: center;
+  }

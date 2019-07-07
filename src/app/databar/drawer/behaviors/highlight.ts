@@ -45,7 +45,6 @@ export class HighlightBehavior {
         this.div.transition()
                 .duration(200)
                 .style("opacity", 1);
-
         // #TODO: sensor -> tooltip display text
         this.div.html(j)
                 .style("left", (d3.event.pageX - 55) + "px")
