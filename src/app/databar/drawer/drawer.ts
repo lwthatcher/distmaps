@@ -52,14 +52,6 @@ export class Drawer {
   // #endregion
 
   // #region [Accessors]
-  // get sensor() { return this.databar.sensor }
-
-  get labels() { return this.databar.labels }
-
-  // TODO: un-stub?
-  get selected_label(): Label | boolean { return false }
-  get show_labels() { return false }
-
   get signals() { return this.layers.host.selectAll('g.signals > path.line') }
 
   get energyWells() { return this.layers.host.selectAll('g.energy > path.energy') }
@@ -70,13 +62,19 @@ export class Drawer {
 
   get mode() { return this.databar.mode }
 
+  get colorer() { return this.databar.colorer }
+
   get labeller() { return this.databar.labeller }
 
-  get colorer() { return this.databar.colorer }
+  get ls() { return this.labeller.ls }
+
+  get labels() { return this.ls ? this.ls.labels : [] }
 
   get label_type() { return this.ls.eventType }
 
-  get ls() { return this.databar.labelstream }
+  get selected_label(): Label | boolean { return this.labeller.selected_label }
+
+  get show_labels() { return false }  // for now, disable label rendering
 
   get isDomainSet() { return this.x && !arraysEqual(this.x.domain(), [0, 1]) }
   // #endregion

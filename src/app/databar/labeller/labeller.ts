@@ -1,6 +1,8 @@
 import { DatabarComponent } from '../databar.component';
 import { Label } from '../interfaces/label.interface';
 import * as d3 from "d3";
+import { LabelScheme } from './label-scheme';
+import { LabelStream } from './labelstream';
 
 // #region [Interfaces]
 interface LabelLike {
@@ -19,14 +21,19 @@ export class Labeller {
     constructor(databar: DatabarComponent) { this.databar = databar }
     // #endregion
 
-    // #region [Accessors]
-    get ls() { return this.databar.labelstream }
+    // #region [Properties]
+    _ls: LabelStream;
+    _selected: false | Label = false;
+    // #endregion
 
-    get labels() { return this.databar.labels }
+    // #region [Accessors]
+    get ls() { return this._ls }
+
+    get labels() { return this.ls.labels }
+
+    get selected_label() { return this._selected }
 
     get x() { return this.databar.x }
-
-    get selected_label() { return this.databar.selected_label }
     // #endregion
 
     // #region [Public Methods]
@@ -36,6 +43,7 @@ export class Labeller {
         if (selected && this.zero_width(selected)) this.delete(selected);
         // set all labels to deselected
         for (let l of this.labels) { l.selected = false }
+        this._selected = false;
         this.ls.emit('deselect');
     }
     
@@ -43,8 +51,9 @@ export class Labeller {
         console.debug('selected label', lbl);
         // deselect all other labels
         for (let l of this.labels) { l.selected = false }
-        // select this event
+        // select this label
         lbl.selected = true;
+        this._selected = lbl;
         // redraw labels and add drag-handles
         this.ls.emit('select');
     }

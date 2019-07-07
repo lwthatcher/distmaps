@@ -35,7 +35,7 @@ export class DatabarComponent implements OnInit {
   get width() { return this.WIDTH - this.margin.left - this.margin.right; }
   get height() { return this.HEIGHT - this.margin.top - this.margin.bottom; }
   // labels
-  labelstream: LabelStream;
+  get labelstream() { return this.labeller.ls }
   get labels() { return this.labelstream && this.labelstream.labels || [] }
   get selected_label() { return this.labels && this.labels.find((lbl) => lbl.selected) || false }
   // Trackers
