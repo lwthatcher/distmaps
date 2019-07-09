@@ -22,10 +22,4 @@ export class AppComponent implements OnInit {
       console.info('app init', this);
     }
     // #endregion
-
-    // #region [Helper Methods]
-    private parse_dims6 = (d) => {
-      return [+d.Ax, +d.Ay, +d.Az, +d.Gx, +d.Gy, +d.Gz]
-    }
-    // #endregion
 }
