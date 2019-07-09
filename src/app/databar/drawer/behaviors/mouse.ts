@@ -21,6 +21,7 @@ export class MouseBehavior {
     constructor(drawer: Drawer) {
         this.drawer = drawer;
         this.mouse = this.setup_mouse();
+        console.debug('mouse behavior', this);
     }
     // #endregion
 
@@ -32,6 +33,8 @@ export class MouseBehavior {
     }
 
     get mode() { return this.drawer.mode }
+
+    get labeller() { return this.drawer.labeller }
     // #endregion
 
     // #region [Mouse Behaviors]
@@ -93,19 +96,22 @@ export class MouseBehavior {
 
     /** general click call-back bound to the SVG */
     clicked(event: MouseEvent) {
-        if (this.overlaps(event)) { return }    // ignore clicks on labels
-        // this.drawer.labeller.deselect();               // deselect any selected labels
+        // ignore clicks on labels
+        if (this.overlaps(event)) { return }
+        // deselect any selected labels
+        if (this.labeller) { this.labeller.deselect }
         // if label-creation mode, add an event
-        if (this.mode.click) {
+        if (this.labeller && this.mode.click) {
             let [x,y] = this.drawer.xy(event);
-            this.drawer.labeller.add(x, this.drawer.label_type);
+            this.labeller.add(x, this.drawer.label_type);
         }
     }
 
     /** click call-back for when a label has been clicked */
     lbl_clicked(lbl) {
-        if (this.mode.selection) this.drawer.labeller.select(lbl)
-        if (this.mode.click)     this.drawer.labeller.change_label(lbl, this.drawer.label_type)
+        if (!this.labeller) { return }
+        if (this.mode.selection) this.labeller.select(lbl)
+        if (this.mode.click)     this.labeller.change_label(lbl, this.drawer.label_type)
     }
 
     double_click() {
