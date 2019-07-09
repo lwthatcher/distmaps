@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
     constructor(private dataloader: DataLoaderService) { }
 
     ngOnInit() {
-      this.data = d3.csv(this.data_file, this.parse_dims6);
+      this.data = this.dataloader.load(this.data_file);
       console.info('app init', this);
     }
     // #endregion
