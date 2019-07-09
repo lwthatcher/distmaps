@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as d3 from 'd3';
+import { DataLoaderService } from './data-loader/data-loader.service';
 
 @Component({
   selector: 'dmap-root',
@@ -14,7 +15,7 @@ export class AppComponent implements OnInit {
   // #endregion
 
     // #region [Constructors]
-    constructor() { }
+    constructor(private dataloader: DataLoaderService) { }
 
     ngOnInit() {
       this.data = d3.csv(this.data_file, this.parse_dims6);

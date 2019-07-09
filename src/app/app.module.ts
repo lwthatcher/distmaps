@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DatabarModule } from './databar/databar.module';
+import { DataLoaderModule } from './data-loader/data-loader.module';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,8 @@ import { DatabarModule } from './databar/databar.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    DatabarModule
+    DatabarModule,
+    DataLoaderModule
   ],
   providers: [],
   bootstrap: [AppComponent]
