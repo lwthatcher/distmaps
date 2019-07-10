@@ -99,7 +99,7 @@ export class MouseBehavior {
         // ignore clicks on labels
         if (this.overlaps(event)) { return }
         // deselect any selected labels
-        if (this.labeller) { this.labeller.deselect }
+        if (this.labeller) { this.labeller.deselect(); }
         // if label-creation mode, add an event
         if (this.labeller && this.mode.click) {
             let [x,y] = this.drawer.xy(event);
@@ -139,7 +139,7 @@ export class MouseBehavior {
 
     /** call-back for performing a left-click on the mouse */
     left_click() {
-        console.info('--left click [no-op]--', d3.event);
+        // console.info('--left click [no-op]--', d3.event);
         // if (this.mode.pour) {this.drawer.behaviors.pour.start()}
     }
     // #endregion

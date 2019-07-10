@@ -66,7 +66,7 @@ export class Drawer {
 
   get labeller() { return this.databar.labeller }
 
-  get ls() { return this.labeller.ls }
+  get ls() { return this.labeller ? this.labeller.ls : null }
 
   get labels() { return this.ls ? this.ls.labels : [] }
 
