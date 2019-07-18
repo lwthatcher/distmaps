@@ -40,7 +40,7 @@ export class Drawer {
     // setup behaviors
     this.behaviors = {};
     this.behaviors.highlight = new HighlightBehavior(this);
-    this.behaviors.drag = new DragBehavior(this);
+    // this.behaviors.drag = new DragBehavior(this);
     // this.behaviors.pour = new PourBehavior(this);
     // this.behaviors.mouse = new MouseBehavior(this);
     this.behaviors.zoom = new ZoomBehavior(this);
