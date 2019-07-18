@@ -42,10 +42,10 @@ export class Drawer {
     this.behaviors.highlight = new HighlightBehavior(this);
     this.behaviors.drag = new DragBehavior(this);
     // this.behaviors.pour = new PourBehavior(this);
-    this.behaviors.mouse = new MouseBehavior(this);
+    // this.behaviors.mouse = new MouseBehavior(this);
     this.behaviors.zoom = new ZoomBehavior(this);
     // register non-local behaviors
-    this.layers.svg.call(this.behaviors.mouse.mouse);
+    // this.layers.svg.call(this.behaviors.mouse.mouse);
     this.layers.svg.call(this.behaviors.zoom.zoom)
                    .on("dblclick.zoom", null);
   }
@@ -385,7 +385,7 @@ export class Drawer {
   }
 
   /** alias method for drawer.behaviors.mouse.clicked() */
-  clicked(event) { this.behaviors.mouse.clicked(event) }
+  clicked(event) { console.debug('click no-op', event); }
   // #endregion
 
   // #region [Helper Methods]

@@ -1,6 +1,5 @@
 import { Component, OnInit, ElementRef, Output, EventEmitter, Input, HostListener } from '@angular/core';
 import { datum } from './interfaces/data.interface';
-import { LabelStream } from './labeller/labelstream';
 import { Labeller } from './labeller/labeller';
 import { ModeTracker } from './modes/tool-mode';
 import { Drawer } from './drawer/drawer';
