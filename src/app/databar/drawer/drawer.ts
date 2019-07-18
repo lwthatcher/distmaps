@@ -1,5 +1,4 @@
 import { DatabarComponent } from '../databar.component';
-import { Label } from '../interfaces/label.interface';
 import { arraysEqual } from '../util/util';
 import { time_format } from './time-format';
 import { LayerMap } from './layers';
@@ -37,12 +36,8 @@ export class Drawer {
     // setup behaviors
     this.behaviors = {};
     this.behaviors.highlight = new HighlightBehavior(this);
-    // this.behaviors.drag = new DragBehavior(this);
-    // this.behaviors.pour = new PourBehavior(this);
-    // this.behaviors.mouse = new MouseBehavior(this);
     this.behaviors.zoom = new ZoomBehavior(this);
     // register non-local behaviors
-    // this.layers.svg.call(this.behaviors.mouse.mouse);
     this.layers.svg.call(this.behaviors.zoom.zoom)
                    .on("dblclick.zoom", null);
   }
@@ -68,9 +63,6 @@ export class Drawer {
   get width() { return (d) => { return this.x(d.end) - this.x(d.start) } }
 
   get middle() { return (d) => { return this.x(d.start + (d.end-d.start)/2) }  }
-
-  // TODO: implement colorer
-  get fill() { return 'blue' }
   // #endregion
 
   // #region [Public Plotting Methods]

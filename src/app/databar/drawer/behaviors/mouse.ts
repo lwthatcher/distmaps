@@ -1,6 +1,7 @@
 import { Drawer } from "../drawer";
 import * as d3 from "d3";
 import { analyzeAndValidateNgModules } from '@angular/compiler';
+import { LabelledDrawer } from '../labelled-drawer';
 
 export class MouseBehavior {
     // #region [Constants]
@@ -11,14 +12,14 @@ export class MouseBehavior {
     // #endregion
 
     // #region [Properties]
-    drawer: Drawer;
+    drawer: LabelledDrawer;
     mouse;
     // #endregion
 
     // #region [Constructor]
     
     /** should be setup after pour behavior */
-    constructor(drawer: Drawer) {
+    constructor(drawer: LabelledDrawer) {
         this.drawer = drawer;
         this.mouse = this.setup_mouse();
         console.debug('mouse behavior', this);

@@ -19,7 +19,9 @@ export class LabelledDrawer extends Drawer {
 
   get selected_label(): Label | boolean { return this.labeller.selected_label }
 
+  // TODO: implement
   get show_labels() { return false }
+  get fill() { return 'blue' }
   // #endregion
 
   // #region [Constructor]
@@ -27,6 +29,7 @@ export class LabelledDrawer extends Drawer {
       super(databar);
       this.behaviors.drag = new DragBehavior(this);
       this.behaviors.mouse = new MouseBehavior(this);
+      this.layers.svg.call(this.behaviors.mouse.mouse);
   }
   // #endregion
 
