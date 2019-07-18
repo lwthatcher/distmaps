@@ -1,7 +1,5 @@
-import { Drawer } from "../drawer";
+import { LabelledDrawer } from "../drawer";
 import * as d3 from "d3";
-import { analyzeAndValidateNgModules } from '@angular/compiler';
-import { LabelledDrawer } from '../labelled-drawer';
 
 export class MouseBehavior {
     // #region [Constants]
