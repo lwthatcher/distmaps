@@ -15,6 +15,11 @@ export class DataLoaderService {
     let uri = path;  // TODO: hook-up to tcm API instead of assets
     return d3.csv(uri, this.parse_dims6);
   }
+
+  loadGradient(path: string) {
+    // @ts-ignore
+    return d3.csv(path, (d) => +d.dist);
+  }
   // #endregion
 
   // #region [Helper Methods]
