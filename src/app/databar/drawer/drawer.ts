@@ -15,9 +15,10 @@ export class Drawer {
   databar: DatabarComponent;
   layers: LayerMap;
   x; x0;
-  y;
+  y; yd;
   Y = [];
   lines = [];
+  areaChart;
   behaviors;
   // #endregion
 
@@ -50,8 +51,6 @@ export class Drawer {
   // #region [Accessors]
   get signals() { return this.layers.host.selectAll('g.signals > path.line') }
 
-  get energyWells() { return this.layers.host.selectAll('g.energy > path.energy') }
-
   get w() { return this.databar.width }
 
   get h() { return this.databar.height }
@@ -72,11 +71,13 @@ export class Drawer {
   // #region [Public Plotting Methods]
   async draw() {
     this.set_ranges();
-    let data = await this.databar.data.then((d: number[][]) => d3.transpose(d))
-    this.set_domains(data);
+    let data = await this.databar.data.then((d: number[][]) => d3.transpose(d));
+    let dmap = await this.databar.dmap;
+    this.set_domains(data, dmap);
     this.draw_xAxis();
     this.draw_yAxis();
     this.plot_signals(data);
+    this.plot_distanceMap(dmap);
   }
 
   clear(...layers) {
@@ -149,6 +150,13 @@ export class Drawer {
   }
   // #endregion
 
+  // #region [Distance Gradient Plotting Helpers]
+  private async plot_distanceMap(dists) {
+    dists = await Promise.resolve(dists);
+    console.log('dist-map', this.yd.domain(), this.yd.range(), dists);
+  }
+  // #endregion
+
   // #region [Domains and Ranges]
   set_ranges() {
     // set x-ranges
@@ -158,33 +166,45 @@ export class Drawer {
     for (let j of this.yDims()) {
       this.Y[j] = d3.scaleLinear().rangeRound([this.h, 0]);
     }
+    this.yd = d3.scaleLinear().rangeRound([this.h, 0]);
     // setup line-drawing method(s)
     for (let j of this.yDims()) {
       this.lines[j] = d3.line().x((d,i) => this.x(i))
                                .y((d) => this.Y[j](d))
     }
+    // setup distance-map area plot
+    this.areaChart = d3.area().x((d,i) => this.x(i))
+                              .y((d) => this.yd(d))
   }
 
-  set_domains(axes) {
+  set_domains(data, dmap?) {
     // setup x-domains
     // TODO: extract data accessor approaches
-      // let max = axes[0][axes[0].length-1].i;
-    let max = axes[0].length;
+      // let max = data[0][data[0].length-1].i;
+    // convenience accessor
+    let _d = (d:any) => d
+    // x-domains
+    let max = data[0].length;
     this.x.domain([0, max]);
     this.x0.domain(this.x.domain());
     // combined y-domains (default)
     if (this.yDims().length === 1) {
-      this.Y[0].domain([d3.min(axes, (ax: any) => d3.min(ax, (d: any) => d)), 
-                        d3.max(axes, (ax: any) => d3.max(ax, (d: any) => d))]);
+      this.Y[0].domain([d3.min(data, (ax: any) => d3.min(ax, _d)), 
+                        d3.max(data, (ax: any) => d3.max(ax, _d))]);
     }
     // individual y-domains
     else for (let j of this.yDims()) {
-      this.Y[j].domain([d3.min(axes[j], (d: any) => d), 
-                        d3.max(axes[j], (d: any) => d)])
+      this.Y[j].domain([d3.min(data[j], _d), 
+                        d3.max(data[j], _d)])
+    }
+    // y-domain for distance area chart (if provided)
+    if (dmap) {
+      this.yd.domain([d3.min(dmap, _d), d3.max(dmap, _d)])
     }
   }
 
   private yDims() {
+    // TODO: sensors parsing check
     // if (this.sensor.channel === 'B') return [0, 1];
     // else return [0];
     return [0];
@@ -231,7 +251,7 @@ export class Drawer {
 }
 
 
-/** 
+/**
  * Extension of the Drawer class that also handles label drawing and interfaces.
  * If no labels are expected, use the Drawer class instead.
  */

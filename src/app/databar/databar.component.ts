@@ -14,6 +14,7 @@ export class DatabarComponent implements OnInit {
 
   //# region [Inputs]
   @Input() data;
+  @Input() dmap;
   // #endregion
 
   // #region [Outputs]
