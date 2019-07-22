@@ -90,7 +90,7 @@ export class DatabarComponent implements OnInit {
     // rescale x-domain to zoom level
     this.drawer.x.domain(t.rescaleX(this.x0).domain());
     // redraw signals
-    this.drawer.updateSignals();
+    this.drawer.update();
     // redraw x-axis
     this.drawer.clear('x-axis');
     this.drawer.draw_xAxis();

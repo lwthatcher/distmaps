@@ -10,6 +10,10 @@ import { DragBehavior } from './behaviors/drag';
 import { MouseBehavior } from './behaviors/mouse';
 import { Label } from '../interfaces/label.interface';
 
+// #region [Interfaces]
+type UpdateTarget = 'signals' | 'area'
+// #endregion
+
 export class Drawer {
   // #region [Variables]
   databar: DatabarComponent;
@@ -114,7 +118,21 @@ export class Drawer {
   // #endregion
 
   // #region [Update Methods]
-  updateSignals() {
+  update(...targets: UpdateTarget[]) {
+    // if targets not provided, default to all
+    if (targets.length === 0) targets = ['signals', 'area']
+    // call appropriate update functions
+    for (let target of targets) {
+      this._UPDATES[target]();
+    }
+  }
+
+  private _UPDATES = {
+    'signals': () => this.updateSignals(),
+    'area': () => this.updateAreaChart()
+  }
+
+  private updateSignals() {
     if (this.yDims().length === 1) {
       this.signals.attr("d", this.lines[0])
     }
@@ -122,6 +140,11 @@ export class Drawer {
       let dim_sigs = this.layers.host.selectAll('g.signals > path.line.line-' + j.toString());
       dim_sigs.attr("d", this.lines[j]);
     }
+  }
+
+  private updateAreaChart() {
+    let chart = this.layers.gradient.select('path')
+    chart.attr('d', this.areaChart);
   }
   // #endregion
 
@@ -159,7 +182,7 @@ export class Drawer {
         .attr('clip-path', "url(#clip)")
         .attr('class', 'area distance-map')
         .attr('d', this.areaChart);
-    console.log('dist-map', this.yd.domain(), this.yd.range(), dists);
+    console.debug('dist-map', this.yd.domain(), this.yd.range());
   }
   // #endregion
 
@@ -256,7 +279,6 @@ export class Drawer {
   }
   // #endregion
 }
-
 
 /**
  * Extension of the Drawer class that also handles label drawing and interfaces.
