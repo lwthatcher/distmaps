@@ -31,7 +31,7 @@ export class ZoomBehavior {
 
   // #region [Zoom Behaviors]
   setup_zoom() {
-      return d3.zoom().scaleExtent([1, 50])
+      return d3.zoom().scaleExtent([1, 100])
                       .translateExtent([[0, 0], [this.drawer.w, this.drawer.h]])
                       .extent([[0, 0], [this.drawer.w, this.drawer.h]])
                       .on('zoom', () => this.zoomed())
