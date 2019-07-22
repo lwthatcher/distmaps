@@ -153,6 +153,12 @@ export class Drawer {
   // #region [Distance Gradient Plotting Helpers]
   private async plot_distanceMap(dists) {
     dists = await Promise.resolve(dists);
+    this.layers.gradient.append('path')
+        .datum(dists)
+        .attr('fill', 'steelblue')
+        .attr('clip-path', "url(#clip)")
+        .attr('class', 'area distance-map')
+        .attr('d', this.areaChart);
     console.log('dist-map', this.yd.domain(), this.yd.range(), dists);
   }
   // #endregion
@@ -174,7 +180,8 @@ export class Drawer {
     }
     // setup distance-map area plot
     this.areaChart = d3.area().x((d,i) => this.x(i))
-                              .y((d) => this.yd(d))
+                              .y0(this.yd(0))
+                              .y1((d) => this.yd(d))
   }
 
   set_domains(data, dmap?) {
