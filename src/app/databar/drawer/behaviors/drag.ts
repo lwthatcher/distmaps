@@ -1,4 +1,4 @@
-import { Drawer } from "../drawer";
+import { Drawer, LabelledDrawer } from "../drawer";
 import * as d3 from "d3";
 
 // #region [Interfaces]
@@ -7,12 +7,12 @@ type side = 'left' | 'right'
 
 export class DragBehavior {
     // #region [Constructor]
-    drawer: Drawer;
+    drawer: LabelledDrawer;
     move;
     resize;
     private m_start;
     private r_start;
-    constructor(drawer: Drawer) {
+    constructor(drawer: LabelledDrawer) {
         this.drawer = drawer;
         this.move = this.setup_move();
         this.resize = {}
