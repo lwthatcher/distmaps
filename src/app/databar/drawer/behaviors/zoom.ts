@@ -1,6 +1,5 @@
-import { Drawer, LabelledDrawer } from "../drawer";
+import { Drawer } from "../drawer";
 import * as d3 from "d3";
-import { ModeTracker } from '../../modes/tool-mode';
 
 export class ZoomBehavior {
     
@@ -8,7 +7,6 @@ export class ZoomBehavior {
   drawer: Drawer;
   zoom;
   private z_start;
-  private _mode;
   // #endregion
 
   // #region [Constructor]
@@ -17,15 +15,6 @@ export class ZoomBehavior {
       this.drawer = drawer;
       this.zoom = this.setup_zoom();
       console.debug('init zoom behavior', this);
-  }
-  // #endregion
-
-  // #region [Accessors]
-  get mode() {
-    if (this.drawer instanceof LabelledDrawer) { return this.drawer.mode }
-    // TODO: local mode hack kind of smells...
-    this._mode = this._mode || new ModeTracker();
-    return this._mode;
   }
   // #endregion
 
@@ -42,23 +31,15 @@ export class ZoomBehavior {
   zoomed() {
     let region = this.drawer.region();
     let type = d3.event.sourceEvent.type;
-    let mode = this.drawer;
     // always allow scroll-wheel zooming
-    if (type === 'wheel' && region === 'frame') this.emit_zoom()
+    if (type === 'wheel' && region === 'frame') this.emit_zoom();
     else if (type === 'mousemove') {
-        // always allow panning on the x-axis
+        // allow panning on the x-axis and frame
         if (region === 'x-axis') this.emit_zoom();
-        else if (region === 'frame') {
-          // allow frame-panning in selection mode
-          if (this.mode.selection) this.emit_zoom();
-          // otherwise treat as a mouse-move
-          if (this.mode.click) this.drawer.behaviors.mouse.mouse_move(); 
-        }
+        else if (region === 'frame') this.emit_zoom();
     }
     else { 
-      console.warn('unexpected zoom-event type:', type, 
-        'region:', region,
-        'mode:', this.mode.current) 
+      console.warn('unexpected zoom-event type:', type, 'region:', region) 
     }
   }
   
@@ -69,13 +50,8 @@ export class ZoomBehavior {
   private zoom_start() { this.z_start = Date.now() }
   
   private zoom_end() {
-    // if (this.mode.pour) { this.drawer.behaviors.pour.end() }
     let Δt = Date.now() - this.z_start;
     this.z_start = undefined;
   }
-  // #endregion
-
-  // #region [Helper Methods]
-
   // #endregion
 }
