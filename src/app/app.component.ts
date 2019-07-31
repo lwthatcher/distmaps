@@ -11,7 +11,7 @@ export class AppComponent implements OnInit {
   // #region [Properties]
   title = 'distmaps';
   data_file = "/assets/pills-blue.short.csv";
-  dist_file = "/assets/pills-blue.short.l2.csv";
+  dist_file = "/assets/pills-blue.short.logl2.csv";
   data: Promise<any>;
   dmap: Promise<any>;
   // #endregion

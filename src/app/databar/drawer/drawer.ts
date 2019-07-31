@@ -183,6 +183,7 @@ export class Drawer {
         .attr('class', 'area distance-map')
         .attr('d', this.areaChart);
     console.debug('dist-map', this.yd.domain(), this.yd.range());
+    // console.debug('dmap', dists)
   }
   // #endregion
 
@@ -202,8 +203,10 @@ export class Drawer {
                                .y((d) => this.Y[j](d))
     }
     // setup distance-map area plot
+    // TODO: don't hard-code min!
+    let min = this.yd(-4.06) // yd(0) for non-log scale..?
     this.areaChart = d3.area().x((d,i) => this.x(i))
-                              .y0(this.yd(0))
+                              .y0(min)
                               .y1((d) => this.yd(d))
   }
 
