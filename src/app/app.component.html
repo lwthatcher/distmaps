@@ -3,8 +3,18 @@
     Welcome to {{ title }}!
   </h1>
   <div class="card">
-    <dmap-databar [data]="data" [dmap]="dmap"></dmap-databar>
+    <h2 class='card-header'>log difference</h2>
+    <dmap-databar [data]="data" [dmap]="dmap1"></dmap-databar>
   </div>
-  
+  <hr/>
+  <div class="card">
+      <h2 class='card-header'>old log diff</h2>
+    <dmap-databar [data]="data" [dmap]="dmap2"></dmap-databar>
+  </div>
+  <hr/>
+  <div class="card">
+      <h2 class='card-header'>L1 diff</h2>
+    <dmap-databar [data]="data" [dmap]="dmap3"></dmap-databar>
+  </div>
 </div>
 <router-outlet></router-outlet>

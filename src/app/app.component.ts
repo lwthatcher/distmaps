@@ -11,9 +11,13 @@ export class AppComponent implements OnInit {
   // #region [Properties]
   title = 'distmaps';
   data_file = "/assets/pills-blue.short.csv";
-  dist_file = "/assets/pb.ld.csv";
+  _dist1 = "/assets/pb.ld.csv";
+  _dist2 = "/assets/pills-blue.short.logl2.csv";
+  _dist3 = "/assets/pills-blue.short.l1.csv";
   data: Promise<any>;
-  dmap: Promise<any>;
+  dmap1: Promise<any>;
+  dmap2: Promise<any>;
+  dmap3: Promise<any>;
   // #endregion
 
     // #region [Constructors]
@@ -21,7 +25,9 @@ export class AppComponent implements OnInit {
 
     ngOnInit() {
       this.data = this.dataloader.load(this.data_file);
-      this.dmap = this.dataloader.loadGradient(this.dist_file);
+      this.dmap1 = this.dataloader.loadGradient(this._dist1);
+      this.dmap2 = this.dataloader.loadGradient(this._dist2);
+      this.dmap3 = this.dataloader.loadGradient(this._dist3);
       console.info('app init', this);
     }
     // #endregion
