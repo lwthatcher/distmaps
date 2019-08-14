@@ -22,6 +22,7 @@ export class Drawer {
   y; yd;
   Y = [];
   lines = [];
+  lineChart;
   areaChart;
   behaviors;
   // #endregion
@@ -204,7 +205,7 @@ export class Drawer {
     }
     // setup distance-map area plot
     // TODO: don't hard-code min!
-    let min = this.yd(-4.06) // yd(0) for non-log scale..?
+    let min = this.yd(0) // yd(0) for non-log scale..?
     this.areaChart = d3.area().x((d,i) => this.x(i))
                               .y0(min)
                               .y1((d) => this.yd(d))
@@ -234,6 +235,43 @@ export class Drawer {
     if (dmap) {
       this.yd.domain([d3.min(dmap, _d), d3.max(dmap, _d)])
     }
+  }
+
+  // TODO: replace set_domains()/set_ranges() calls to this one call
+  private set_scales(data, dmap?) {
+    // convenience accessors
+    let _d = (d:any) => d
+    
+    // extract values
+    let xmax = data[0].length;
+    let dataMin = +d3.min(data, (ax: any) => d3.min(ax, _d));
+    let dataMax = +d3.max(data, (ax: any) => d3.max(ax, _d));
+    let distMin = dmap?  Math.min(0, +d3.min(dmap, _d)) : 0;
+    let distMax = dmap? +d3.max(dmap, _d) : 1;
+    // set x-scales
+    this.x = d3.scaleLinear()
+               .rangeRound([0, this.w])
+               .domain([0, xmax]);
+    this.x0 = d3.scaleLinear()
+                .rangeRound(this.x.range())
+                .domain(this.x.domain());
+    // set y-scales
+    this.y = d3.scaleLinear()
+               .rangeRound([this.h, 0])
+               .domain([dataMin, dataMax]);
+    this.yd = d3.scaleLinear()
+                .rangeRound([this.h, 0])
+                .domain([distMin, distMax]);
+    // setup line-chart
+    this.lineChart = d3.line()
+                       .x((d,i) => this.x(i))
+                       .y((d) => this.y(d));
+    // setup distance area-chart
+    this.areaChart = d3.area()
+                       .x((d,i) => this.x(i))
+                       .y0(distMin)
+                       .y1((d) => this.yd(d))
+
   }
 
   private yDims() {
