@@ -10,10 +10,10 @@ import { DataLoaderService } from './data-loader/data-loader.service';
 export class AppComponent implements OnInit {
   // #region [Properties]
   title = 'distmaps';
-  data_file = "/assets/pills-blue.short.csv";
-  _dist1 = "/assets/pb.ld.csv";
-  _dist2 = "/assets/pills-blue.short.logl2.csv";
-  _dist3 = "/assets/pills-blue.short.l1.csv";
+  data_file = "/assets/dry-wall.short.csv";
+  _dist1 = "/assets/dw.ld.csv";
+  _dist2 = "/assets/dw.l2.csv";
+  _dist3 = "/assets/dw.var.csv";
   data: Promise<any>;
   dmap1: Promise<any>;
   dmap2: Promise<any>;
