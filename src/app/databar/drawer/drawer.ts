@@ -19,11 +19,9 @@ export class Drawer {
   databar: DatabarComponent;
   layers: LayerMap;
   x; x0;
-  y; yd; yd2;
-  Y = [];
-  lines = [];
+  y; yd;
   lineChart;
-  areaChart; areaChart2;
+  areaChart;
   behaviors;
   // #endregion
 
@@ -77,8 +75,6 @@ export class Drawer {
   async draw() {
     let data = await this.databar.data.then((d: number[][]) => d3.transpose(d));
     let dmap = await this.databar.dmap;
-    // this.set_ranges();
-    // this.set_domains(data, dmap);
     this.set_scales(data, dmap);
     this.draw_xAxis();
     this.draw_yAxis();
@@ -112,12 +108,6 @@ export class Drawer {
     this.layers.axes.append('g')
         .attr('class', 'y-axis')
         .call(d3.axisLeft(this.yd));
-    // if (this.yDims().length > 1) {
-    //   this.layers.axes.append('g')
-    //     .attr('class', 'y-axis')
-    //     .attr("transform", "translate( " + W + ", 0 )")
-    //     .call(d3.axisLeft(this.Y[1]));
-    // }
   }
   // #endregion
 
@@ -137,14 +127,7 @@ export class Drawer {
   }
 
   private updateSignals() {
-    this.signals.attr('d', this.lineChart)
-    // if (this.yDims().length === 1) {
-    //   this.signals.attr("d", this.lines[0])
-    // }
-    // else for (let j of this.yDims()) {
-    //   let dim_sigs = this.layers.host.selectAll('g.signals > path.line.line-' + j.toString());
-    //   dim_sigs.attr("d", this.lines[j]);
-    // }
+    this.signals.attr('d', this.lineChart);
   }
 
   private updateAreaChart() {
@@ -193,59 +176,9 @@ export class Drawer {
   // #endregion
 
   // #region [Domains and Ranges]
-  set_ranges() {
-    // set x-ranges
-    this.x = d3.scaleLinear().rangeRound([0, this.w]);
-    this.x0 = d3.scaleLinear().rangeRound([0, this.w]);
-    // set y-ranges
-    for (let j of this.yDims()) {
-      this.Y[j] = d3.scaleLinear().rangeRound([this.h, 0]);
-    }
-    this.yd2 = d3.scaleLinear().rangeRound([this.h, 0]);
-    // setup line-drawing method(s)
-    for (let j of this.yDims()) {
-      this.lines[j] = d3.line().x((d,i) => this.x(i))
-                               .y((d) => this.Y[j](d))
-    }
-    // setup distance-map area plot
-    // TODO: don't hard-code min!
-    let min = this.yd2(0) // yd(0) for non-log scale..?
-    this.areaChart2 = d3.area().x((d,i) => this.x(i))
-                              .y0(min)
-                              .y1((d) => this.yd2(d))
-  }
-
-  set_domains(data, dmap?) {
-    // setup x-domains
-    // TODO: extract data accessor approaches
-      // let max = data[0][data[0].length-1].i;
-    // convenience accessor
-    let _d = (d:any) => d
-    // x-domains
-    let max = data[0].length;
-    this.x.domain([0, max]);
-    this.x0.domain(this.x.domain());
-    // combined y-domains (default)
-    if (this.yDims().length === 1) {
-      this.Y[0].domain([d3.min(data, (ax: any) => d3.min(ax, _d)), 
-                        d3.max(data, (ax: any) => d3.max(ax, _d))]);
-    }
-    // individual y-domains
-    else for (let j of this.yDims()) {
-      this.Y[j].domain([d3.min(data[j], _d), 
-                        d3.max(data[j], _d)])
-    }
-    // y-domain for distance area chart (if provided)
-    if (dmap) {
-      this.yd2.domain([d3.min(dmap, _d), d3.max(dmap, _d)])
-    }
-  }
-
-  // TODO: replace set_domains()/set_ranges() calls to this one call
   private set_scales(data, dmap) {
     // convenience accessors
     let _d = (d:any) => d
-    
     // extract values
     let xmax = data[0].length;
     let dataMin = +d3.min(data, (ax: any) => d3.min(ax, _d));
@@ -275,15 +208,6 @@ export class Drawer {
                        .x((d,i) => this.x(i))
                        .y0(this.yd(distMin))
                        .y1((d) => this.yd(d))
-                       
-
-  }
-
-  private yDims() {
-    // TODO: sensors parsing check
-    // if (this.sensor.channel === 'B') return [0, 1];
-    // else return [0];
-    return [0];
   }
   // #endregion
 
@@ -310,8 +234,7 @@ export class Drawer {
   // #region [Helper Methods]
   private domains_and_ranges() {
     let dr = (d) => {return [d.domain(), d.range()]}
-    let ys = this.Y.map((y) => dr(y))
-    return {x: dr(this.x), x0: dr(this.x0), y: dr(this.y), yd: dr(this.yd), yd2: dr(this.yd2), Y: ys} 
+    return {x: dr(this.x), x0: dr(this.x0), y: dr(this.y), yd: dr(this.yd)} 
   }
 
   logInfo() {
